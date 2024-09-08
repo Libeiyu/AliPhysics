@@ -79,6 +79,13 @@ public:
     fDoSecondPeakVn=doVn;
   }
   void SetHarmonic(Int_t harmonic=2) {fHarmonic=harmonic;}
+  void SetRflFunc(const TF1 *h1,const TF1 *h2)
+  {
+    fMassRflFuncR = (TH1F*)h1->Clone();
+    // fMassRflFuncR->SetDirectory(0);
+    fMassBkgRflFuncR = (TH1F*)h2->Clone();
+    // fMassBkgRflFuncR->SetDirectory(0);
+  }
 
   //getters
   Double_t GetVn() const {return fVn;}
@@ -133,6 +140,15 @@ public:
     if(fVnBkgFunc) return fVnBkgFunc;
     else return nullptr;
   }
+  TH1F* GetMassRflFunc() const {
+    if(fReflections) return fMassRflFuncR;
+    else return nullptr;
+  }
+  TH1F* GetMassBkgRflFunc() const {
+    if(fReflections) return fMassBkgRflFuncR;
+    else return nullptr;
+  }
+
 
   //struct for global chi2 (for simultaneus fit)
   struct AliHFGlobalChi2 {
@@ -231,6 +247,8 @@ private:
   Bool_t              fFixRflOverSig;               /// switch for fix refl/signal
   TH1F*               fHistoTemplRfl;               /// histogram with reflection template
   TH1F*               fHistoTemplRflInit;           /// initial histogram with reflection template
+  TH1F*               fMassRflFuncR;
+  TH1F*               fMassBkgRflFuncR;
   TF1*                fMassRflFunc;                 /// fit function for reflections
   TF1*                fMassBkgRflFunc;              /// mass bkg fit function plus reflections (final, after simultaneus fit)
   TString             fRflOpt;                      /// refelction option

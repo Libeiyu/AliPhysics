@@ -28,7 +28,7 @@ using namespace std;
 
 //________________________________________________________________________________________________//
 //systematic uncertainties
-const double absSystUncFit[] = {0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02};
+const double absSystUncFit[] = {0.02,0.02,0.02,0.02,0.02,0.02,0.02}; //,0.02,0.02,0.02,0.02};
 const double relResolUnc = 0.01;
 
 //________________________________________________________________________________________________//
@@ -69,7 +69,7 @@ void ComputePromptVnWithSyst(TString outFileName, TString inFileNameVn, TString 
         inFilefPrompt = TFile::Open(inFileNamefPrompt.Data());
         if(!inFilefPrompt || !inFilefPrompt->IsOpen())
             return;
-        hfPromptCent = static_cast<TH1F*>(inFilefPrompt->Get("hfPromptCent"));
+        hfPromptCent = static_cast<TH1F*>(inFilefPrompt->Get("hfPromptCentNb"));
         hfPromptMin = static_cast<TH1F*>(inFilefPrompt->Get("hfPromptMinNb"));
         hfPromptMax = static_cast<TH1F*>(inFilefPrompt->Get("hfPromptMaxNb"));
         hfPromptCent->SetDirectory(0);

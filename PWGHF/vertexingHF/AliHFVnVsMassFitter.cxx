@@ -3,6 +3,7 @@
 #include <TROOT.h>
 #include <TMath.h>
 #include <TF1.h>
+#include <TFile.h>
 #include <TGraphErrors.h>
 #include <TColor.h>
 #include <TLegend.h>
@@ -104,7 +105,9 @@ AliHFVnVsMassFitter::AliHFVnVsMassFitter()
   ,fFixSecMass(kFALSE)
   ,fFixSecWidth(kFALSE)
   ,fDoSecondPeakVn(kFALSE)
-  ,fHarmonic(2) {
+  ,fHarmonic(2)
+  ,fMassRflFuncR(0x0)
+  ,fMassBkgRflFuncR(0x0) {
 
     //default constructor
 }
@@ -189,7 +192,9 @@ AliHFVnVsMassFitter::AliHFVnVsMassFitter(TH1F* hMass, TH1F* hvn, Double_t min, D
   ,fFixSecMass(kFALSE)
   ,fFixSecWidth(kFALSE)
   ,fDoSecondPeakVn(kFALSE)
-  ,fHarmonic(2) {
+  ,fHarmonic(2)
+  ,fMassRflFuncR(0x0)
+  ,fMassBkgRflFuncR(0x0) {
 
     //standard constructor
     fMassHisto = (TH1F*)hMass->Clone("fHistoInvMass");
@@ -219,6 +224,8 @@ AliHFVnVsMassFitter::~AliHFVnVsMassFitter() {
   if(fHistoTemplRflInit)  delete fHistoTemplRflInit;
   if(fMassRflFunc)        delete fMassRflFunc;
   if(fMassSecPeakFunc)    delete fMassSecPeakFunc;
+  if(fMassRflFuncR)       delete fMassRflFuncR;
+  if(fMassBkgRflFuncR)    delete fMassBkgRflFuncR;
 }
 
 //________________________________________________________________
@@ -369,7 +376,13 @@ Bool_t AliHFVnVsMassFitter::SimultaneusFit(Bool_t drawFit) {
   fChiSquare = result.MinFcnValue();
   fNDF = result.Ndf();
   fProb = result.Prob();
-
+  if(fReflections) {
+  // TFile* outputFile = new TFile("/home/wuct/localAnalysis/flow/DmesonAnalysis/run3/flow/output.root", "RECREATE");
+  // fMassRflFunc->Write();
+  // fMassBkgRflFunc->Write();
+  // outputFile->Close();
+  SetRflFunc(fMassRflFunc,fMassBkgRflFunc);
+  }
   return kTRUE;
 }
 
